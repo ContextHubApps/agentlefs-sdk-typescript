@@ -3,7 +3,7 @@
   "private": true,
   "description": "Generation workspace for the ContextHub TypeScript SDK. Not the published package; that is generated into sdks/typescript.",
   "scripts": {
-    "spec:pull": "curl -sS --fail --max-time 30 -o openapi/v1.yaml https://trycontexthub.com/v1/openapi.yaml && echo \"fetched $(wc -c < openapi/v1.yaml) bytes\"",
+    "spec:pull": "mkdir -p openapi && curl -sS --fail --max-time 30 -o openapi/v1.yaml https://trycontexthub.com/v1/openapi.yaml && echo \"fetched $(wc -c < openapi/v1.yaml) bytes\"",
     "generate": "bun run spec:pull && fern generate --local",
     "check": "bun run spec:pull && fern check"
   }
