@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://schema.buildwithfern.dev/generators-yml.json
+api:
+  specs:
+    # The API repo is the source of truth for this spec; nothing here edits it.
+    #
+    # A relative path is deliberate over the absolute one `fern init` wrote: that was a
+    # traversal out of this checkout's location on one machine, which breaks for anyone
+    # who clones somewhere else.
+    #
+    # It assumes the two repos are checked out as siblings. If yours are not, edit this
+    # line locally; there is no env-var override (checked, `fern generate --help` has no
+    # spec flag), so do not go looking for one.
+    - openapi: ../../proof-of-concept-2/openapi/v1.yaml
+default-group: local
+groups:
+  local:
+    generators:
+      - name: fern-typescript-sdk
+        output:
+          location: local-file-system
+          path: ../sdks/typescript
+        version: 3.88.0
