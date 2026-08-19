@@ -1,26 +1,26 @@
 # The generated SDK IS committed, deliberately.
 #
-# It was gitignored at first, which left this repo with six config files and no SDK: a
-# clone was not browsable, not installable from a git URL, and required Docker to see
-# anything at all. That is wrong for a client library, whatever its merits for a private
-# prototype.
+# It was gitignored at first, which left this repo with config files and no SDK: a clone was
+# not browsable, not installable from a git URL, and required Docker to see anything. That is
+# wrong for a client library, whatever its merits for a private prototype.
 #
-# Committing it is what Anthropic's and Stainless's SDK repos do, and it buys the thing
-# that matters most during review: a spec change produces a readable diff showing what
-# happened to the PUBLIC API. "This renamed a method" is exactly the change that is
-# expensive to discover after publishing.
+# Committing it is what Anthropic's and Stainless's SDK repos do, and it buys the thing that
+# matters most in review: a spec change produces a readable diff showing what happened to the
+# PUBLIC API. "This renamed a method" is exactly the change that is expensive to discover
+# after publishing.
 #
-# So sdks/ is tracked. Regenerate with:
-#   fern generate --local
-# and commit the result as its own commit, so the machine-written diff stays separate from
-# hand-written changes.
+# Regenerate with `bun run generate` (pulls the live spec, then generates) and commit the
+# result as its own commit, so machine-written diffs stay separate from hand-written ones.
+
+# The spec is a CACHE of what production serves, not a source of truth. Committing it would
+# create a second copy that can silently drift from the API. `bun run spec:pull` refetches.
+openapi/
 
 # Fern working files
 **/.preview
 **/.definition
 
-# Dependencies and build output inside the generated tree: reproducible from source, and
-# node_modules in particular would be tens of thousands of files.
+# Reproducible from source; node_modules would be tens of thousands of files.
 node_modules/
 sdks/typescript/node_modules/
 sdks/typescript/dist/

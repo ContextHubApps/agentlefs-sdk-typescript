@@ -1,27 +1,21 @@
 # yaml-language-server: $schema=https://schema.buildwithfern.dev/generators-yml.json
 api:
   specs:
-    # Fetched over HTTP from the API itself, not read from a sibling checkout.
+    # A LOCAL path, fetched from the live API before generation. Not a URL.
     #
-    # The previous value was a relative path into ../../proof-of-concept-2, which assumed
-    # both repos were cloned side by side. That works on one laptop and nowhere else: a CI
-    # runner has no sibling, and the API repo is private, so generating in CI would have
-    # needed a cross-repo token just to read a file.
+    # `generators.yml` does not accept an https URL here, despite the quickstart implying
+    # otherwise: `fern init --openapi <url>` DOWNLOADS the spec to a temp file and writes a
+    # local path, and pointing this key at a URL fails with "Missing file". Verified both
+    # ways rather than assumed.
     #
-    # This URL is public and unauthenticated (see the route's comment in v1/router.ts for
-    # why a spec is not a secret), so `fern generate --local` behaves the same here and in
-    # CI with no credentials at all.
+    # So the spec is fetched into openapi/ before generating, by `bun run spec:pull` (see
+    # package.json) or by CI. That keeps the property that actually mattered: generation
+    # reads what PRODUCTION serves, not a sibling checkout of a private repo, so CI needs no
+    # cross-repo token and the path does not depend on where anyone cloned things.
     #
-    # It also means the SDK is generated from what production actually serves rather than
-    # from whatever is on the local disk, which is the version customers experience.
-    #
-    # PENDING: the route ships in the API repo's feat/v1-spec-route branch and returns 404
-    # in production until that merges and deploys. Until then the local path below is the
-    # working source; swap to the URL once `curl -sI https://trycontexthub.com/v1/openapi.yaml`
-    # returns 200. Both lines are kept so the switch is one comment move, not a rewrite.
-    #
-    # - openapi: https://trycontexthub.com/v1/openapi.yaml
-    - openapi: ../../proof-of-concept-2/openapi/v1.yaml
+    # openapi/v1.yaml is gitignored: it is a cache of the live contract, and committing it
+    # would create a second copy of the truth that can silently drift.
+    - openapi: ../openapi/v1.yaml
 default-group: local
 groups:
   local:
