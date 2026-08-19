@@ -1,15 +1,26 @@
 # yaml-language-server: $schema=https://schema.buildwithfern.dev/generators-yml.json
 api:
   specs:
-    # The API repo is the source of truth for this spec; nothing here edits it.
+    # Fetched over HTTP from the API itself, not read from a sibling checkout.
     #
-    # A relative path is deliberate over the absolute one `fern init` wrote: that was a
-    # traversal out of this checkout's location on one machine, which breaks for anyone
-    # who clones somewhere else.
+    # The previous value was a relative path into ../../proof-of-concept-2, which assumed
+    # both repos were cloned side by side. That works on one laptop and nowhere else: a CI
+    # runner has no sibling, and the API repo is private, so generating in CI would have
+    # needed a cross-repo token just to read a file.
     #
-    # It assumes the two repos are checked out as siblings. If yours are not, edit this
-    # line locally; there is no env-var override (checked, `fern generate --help` has no
-    # spec flag), so do not go looking for one.
+    # This URL is public and unauthenticated (see the route's comment in v1/router.ts for
+    # why a spec is not a secret), so `fern generate --local` behaves the same here and in
+    # CI with no credentials at all.
+    #
+    # It also means the SDK is generated from what production actually serves rather than
+    # from whatever is on the local disk, which is the version customers experience.
+    #
+    # PENDING: the route ships in the API repo's feat/v1-spec-route branch and returns 404
+    # in production until that merges and deploys. Until then the local path below is the
+    # working source; swap to the URL once `curl -sI https://trycontexthub.com/v1/openapi.yaml`
+    # returns 200. Both lines are kept so the switch is one comment move, not a rewrite.
+    #
+    # - openapi: https://trycontexthub.com/v1/openapi.yaml
     - openapi: ../../proof-of-concept-2/openapi/v1.yaml
 default-group: local
 groups:

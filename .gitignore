@@ -1,13 +1,27 @@
-# Generated SDK output. Regenerated from the API repo's openapi/v1.yaml by
-# `fern generate --local`, so committing it would mean reviewing a 122-file
-# machine-written diff on every spec change.
+# The generated SDK IS committed, deliberately.
 #
-# This is a deliberate choice for the CURRENT stage, where nothing is published. Once
-# the package ships to npm, the generated tree has to be committed (or built in CI),
-# because a consumer installing from git needs the code to exist. Revisit then.
-sdks/
+# It was gitignored at first, which left this repo with six config files and no SDK: a
+# clone was not browsable, not installable from a git URL, and required Docker to see
+# anything at all. That is wrong for a client library, whatever its merits for a private
+# prototype.
+#
+# Committing it is what Anthropic's and Stainless's SDK repos do, and it buys the thing
+# that matters most during review: a spec change produces a readable diff showing what
+# happened to the PUBLIC API. "This renamed a method" is exactly the change that is
+# expensive to discover after publishing.
+#
+# So sdks/ is tracked. Regenerate with:
+#   fern generate --local
+# and commit the result as its own commit, so the machine-written diff stays separate from
+# hand-written changes.
 
 # Fern working files
 **/.preview
 **/.definition
+
+# Dependencies and build output inside the generated tree: reproducible from source, and
+# node_modules in particular would be tens of thousands of files.
 node_modules/
+sdks/typescript/node_modules/
+sdks/typescript/dist/
+sdks/typescript/package-lock.json
