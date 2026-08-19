@@ -20,3 +20,23 @@ groups:
           location: local-file-system
           path: ../sdks/typescript
         version: 3.88.0
+        # ── NO `config:` BLOCK HERE, DELIBERATELY ──────────────────────────────
+        # Adding one to this generator version silently breaks generation: the CLI still
+        # prints "Wrote files to ..." and "Finished", and zero files appear. Bisected it
+        # to the block itself rather than to any particular key, and it is not about the
+        # package name being npm-scoped (`contexthub` fails the same way as
+        # `@contexthub/sdk`).
+        #
+        # So package metadata (name, version, description) is NOT set here yet, which is
+        # why `--package` cannot build an npm tarball: the generator emits either no
+        # package.json or one named "test-package" with an empty version, and `npm pack`
+        # refuses it.
+        #
+        # That is fine while nothing is published. Before publishing, resolve it one of:
+        #   1. try a newer generator version (3.88.0 is what `fern init` pinned)
+        #   2. report it to Fern with this repro
+        #   3. write package.json as a post-generation step in CI
+        #
+        # Do not "fix" this by re-adding a config block without re-running
+        # `fern generate --local` and COUNTING THE FILES. A success message is not
+        # evidence here.
