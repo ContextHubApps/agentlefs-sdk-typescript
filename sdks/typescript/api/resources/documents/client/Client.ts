@@ -8,7 +8,7 @@ import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import * as ContexthubApi from "../../../index.js";
+import * as AgentlefsApi from "../../../index.js";
 
 export declare namespace DocumentsClient {
     export type Options = BaseClientOptions;
@@ -24,14 +24,14 @@ export class DocumentsClient {
     }
 
     /**
-     * @param {ContexthubApi.ListDocumentsRequest} request
+     * @param {AgentlefsApi.ListDocumentsRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.documents.listDocuments({
@@ -39,16 +39,16 @@ export class DocumentsClient {
      *     })
      */
     public listDocuments(
-        request: ContexthubApi.ListDocumentsRequest,
+        request: AgentlefsApi.ListDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.DocumentList> {
+    ): core.HttpResponsePromise<AgentlefsApi.DocumentList> {
         return core.HttpResponsePromise.fromPromise(this.__listDocuments(request, requestOptions));
     }
 
     private async __listDocuments(
-        request: ContexthubApi.ListDocumentsRequest,
+        request: AgentlefsApi.ListDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.DocumentList>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.DocumentList>> {
         const { folder, path, type: type_, label, limit, cursor } = request;
         const _queryParams: Record<string, unknown> = {
             folder,
@@ -68,7 +68,7 @@ export class DocumentsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 "v1/documents",
             ),
             method: "GET",
@@ -85,28 +85,28 @@ export class DocumentsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.DocumentList, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.DocumentList, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -125,16 +125,16 @@ export class DocumentsClient {
      * the original outcome with `replayed: true`; reusing it with a different body
      * is a `409`.
      *
-     * @param {ContexthubApi.CreateDocumentRequest} request
+     * @param {AgentlefsApi.CreateDocumentRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.NotFoundError}
-     * @throws {@link ContexthubApi.ConflictError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.NotFoundError}
+     * @throws {@link AgentlefsApi.ConflictError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.documents.createDocument({
@@ -145,16 +145,16 @@ export class DocumentsClient {
      *     })
      */
     public createDocument(
-        request: ContexthubApi.CreateDocumentRequest,
+        request: AgentlefsApi.CreateDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.WriteResult> {
+    ): core.HttpResponsePromise<AgentlefsApi.WriteResult> {
         return core.HttpResponsePromise.fromPromise(this.__createDocument(request, requestOptions));
     }
 
     private async __createDocument(
-        request: ContexthubApi.CreateDocumentRequest,
+        request: AgentlefsApi.CreateDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.WriteResult>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.WriteResult>> {
         const { "Idempotency-Key": idempotencyKey, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -167,7 +167,7 @@ export class DocumentsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 "v1/documents",
             ),
             method: "POST",
@@ -183,35 +183,35 @@ export class DocumentsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.WriteResult, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.WriteResult, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new ContexthubApi.NotFoundError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.NotFoundError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new ContexthubApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new AgentlefsApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -223,15 +223,15 @@ export class DocumentsClient {
     }
 
     /**
-     * @param {ContexthubApi.RetrieveDocumentRequest} request
+     * @param {AgentlefsApi.RetrieveDocumentRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.NotFoundError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.NotFoundError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.documents.retrieveDocument({
@@ -240,16 +240,16 @@ export class DocumentsClient {
      *     })
      */
     public retrieveDocument(
-        request: ContexthubApi.RetrieveDocumentRequest,
+        request: AgentlefsApi.RetrieveDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.DocumentContent> {
+    ): core.HttpResponsePromise<AgentlefsApi.DocumentContent> {
         return core.HttpResponsePromise.fromPromise(this.__retrieveDocument(request, requestOptions));
     }
 
     private async __retrieveDocument(
-        request: ContexthubApi.RetrieveDocumentRequest,
+        request: AgentlefsApi.RetrieveDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.DocumentContent>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.DocumentContent>> {
         const { path, folder, offset } = request;
         const _queryParams: Record<string, unknown> = {
             folder,
@@ -265,7 +265,7 @@ export class DocumentsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 `v1/documents/${core.url.encodePathParam(path)}`,
             ),
             method: "GET",
@@ -282,33 +282,33 @@ export class DocumentsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.DocumentContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.DocumentContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new ContexthubApi.NotFoundError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.NotFoundError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -323,16 +323,16 @@ export class DocumentsClient {
      * `If-Match` is required. Send the `ETag` from a read to update only if the
      * document has not changed since, or `*` to overwrite unconditionally.
      *
-     * @param {ContexthubApi.UpdateDocumentRequest} request
+     * @param {AgentlefsApi.UpdateDocumentRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.NotFoundError}
-     * @throws {@link ContexthubApi.ConflictError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.NotFoundError}
+     * @throws {@link AgentlefsApi.ConflictError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.documents.updateDocument({
@@ -343,16 +343,16 @@ export class DocumentsClient {
      *     })
      */
     public updateDocument(
-        request: ContexthubApi.UpdateDocumentRequest,
+        request: AgentlefsApi.UpdateDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.WriteResult> {
+    ): core.HttpResponsePromise<AgentlefsApi.WriteResult> {
         return core.HttpResponsePromise.fromPromise(this.__updateDocument(request, requestOptions));
     }
 
     private async __updateDocument(
-        request: ContexthubApi.UpdateDocumentRequest,
+        request: AgentlefsApi.UpdateDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.WriteResult>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.WriteResult>> {
         const { path, folder, "If-Match": ifMatch, ..._body } = request;
         const _queryParams: Record<string, unknown> = {
             folder,
@@ -368,7 +368,7 @@ export class DocumentsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 `v1/documents/${core.url.encodePathParam(path)}`,
             ),
             method: "PUT",
@@ -388,35 +388,35 @@ export class DocumentsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.WriteResult, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.WriteResult, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new ContexthubApi.NotFoundError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.NotFoundError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new ContexthubApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new AgentlefsApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -435,16 +435,16 @@ export class DocumentsClient {
      *
      * `If-Match` is required, for the same reason as on update.
      *
-     * @param {ContexthubApi.DeleteDocumentRequest} request
+     * @param {AgentlefsApi.DeleteDocumentRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.NotFoundError}
-     * @throws {@link ContexthubApi.ConflictError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.NotFoundError}
+     * @throws {@link AgentlefsApi.ConflictError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.documents.deleteDocument({
@@ -454,16 +454,16 @@ export class DocumentsClient {
      *     })
      */
     public deleteDocument(
-        request: ContexthubApi.DeleteDocumentRequest,
+        request: AgentlefsApi.DeleteDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.DeleteResult> {
+    ): core.HttpResponsePromise<AgentlefsApi.DeleteResult> {
         return core.HttpResponsePromise.fromPromise(this.__deleteDocument(request, requestOptions));
     }
 
     private async __deleteDocument(
-        request: ContexthubApi.DeleteDocumentRequest,
+        request: AgentlefsApi.DeleteDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.DeleteResult>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.DeleteResult>> {
         const { path, folder, "If-Match": ifMatch } = request;
         const _queryParams: Record<string, unknown> = {
             folder,
@@ -479,7 +479,7 @@ export class DocumentsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 `v1/documents/${core.url.encodePathParam(path)}`,
             ),
             method: "DELETE",
@@ -496,35 +496,35 @@ export class DocumentsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.DeleteResult, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.DeleteResult, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new ContexthubApi.NotFoundError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.NotFoundError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new ContexthubApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new AgentlefsApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -550,16 +550,16 @@ export class DocumentsClient {
      * acknowledged. See `POST /v1/moves` for how that works, since it is the same
      * gate.
      *
-     * @param {ContexthubApi.RenameDocumentRequest} request
+     * @param {AgentlefsApi.RenameDocumentRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.NotFoundError}
-     * @throws {@link ContexthubApi.ConflictError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.NotFoundError}
+     * @throws {@link AgentlefsApi.ConflictError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.documents.renameDocument({
@@ -570,16 +570,16 @@ export class DocumentsClient {
      *     })
      */
     public renameDocument(
-        request: ContexthubApi.RenameDocumentRequest,
+        request: AgentlefsApi.RenameDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.MoveResult> {
+    ): core.HttpResponsePromise<AgentlefsApi.MoveResult> {
         return core.HttpResponsePromise.fromPromise(this.__renameDocument(request, requestOptions));
     }
 
     private async __renameDocument(
-        request: ContexthubApi.RenameDocumentRequest,
+        request: AgentlefsApi.RenameDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.MoveResult>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.MoveResult>> {
         const { "Idempotency-Key": idempotencyKey, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -592,7 +592,7 @@ export class DocumentsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 "v1/renames",
             ),
             method: "POST",
@@ -608,35 +608,35 @@ export class DocumentsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.MoveResult, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.MoveResult, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new ContexthubApi.NotFoundError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.NotFoundError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new ContexthubApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new AgentlefsApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -676,16 +676,16 @@ export class DocumentsClient {
      * The reported subjects are bounded by what your own credential can already
      * discover. Counts of subjects you cannot see are not included.
      *
-     * @param {ContexthubApi.MoveDocumentRequest} request
+     * @param {AgentlefsApi.MoveDocumentRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.NotFoundError}
-     * @throws {@link ContexthubApi.ConflictError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.NotFoundError}
+     * @throws {@link AgentlefsApi.ConflictError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.documents.moveDocument({
@@ -697,16 +697,16 @@ export class DocumentsClient {
      *     })
      */
     public moveDocument(
-        request: ContexthubApi.MoveDocumentRequest,
+        request: AgentlefsApi.MoveDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.MoveResult> {
+    ): core.HttpResponsePromise<AgentlefsApi.MoveResult> {
         return core.HttpResponsePromise.fromPromise(this.__moveDocument(request, requestOptions));
     }
 
     private async __moveDocument(
-        request: ContexthubApi.MoveDocumentRequest,
+        request: AgentlefsApi.MoveDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.MoveResult>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.MoveResult>> {
         const { "Idempotency-Key": idempotencyKey, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -719,7 +719,7 @@ export class DocumentsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 "v1/moves",
             ),
             method: "POST",
@@ -735,35 +735,35 @@ export class DocumentsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.MoveResult, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.MoveResult, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new ContexthubApi.NotFoundError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.NotFoundError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new ContexthubApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new AgentlefsApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,

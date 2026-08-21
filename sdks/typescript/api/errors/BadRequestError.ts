@@ -2,12 +2,12 @@
 
 import type * as core from "../../core/index.js";
 import * as errors from "../../errors/index.js";
-import type * as ContexthubApi from "../index.js";
+import type * as AgentlefsApi from "../index.js";
 
-export class BadRequestError extends errors.ContexthubApiError {
-    public declare readonly body: ContexthubApi.Error_;
+export class BadRequestError extends errors.AgentlefsApiError {
+    public declare readonly body: AgentlefsApi.Error_;
 
-    constructor(body: ContexthubApi.Error_, rawResponse?: core.RawResponse) {
+    constructor(body: AgentlefsApi.Error_, rawResponse?: core.RawResponse) {
         super({
             message: "BadRequestError",
             statusCode: 400,

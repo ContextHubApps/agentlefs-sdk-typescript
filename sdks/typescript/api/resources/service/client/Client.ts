@@ -7,7 +7,7 @@ import * as core from "../../../../core/index.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import type * as ContexthubApi from "../../../index.js";
+import type * as AgentlefsApi from "../../../index.js";
 
 export declare namespace ServiceClient {
     export type Options = BaseClientOptions;
@@ -28,27 +28,27 @@ export class ServiceClient {
      *
      * @param {ServiceClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.service.checkHealth()
      */
     public checkHealth(
         requestOptions?: ServiceClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.HealthStatus> {
+    ): core.HttpResponsePromise<AgentlefsApi.HealthStatus> {
         return core.HttpResponsePromise.fromPromise(this.__checkHealth(requestOptions));
     }
 
     private async __checkHealth(
         requestOptions?: ServiceClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.HealthStatus>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.HealthStatus>> {
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, requestOptions?.headers);
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 "v1/health",
             ),
             method: "GET",
@@ -61,11 +61,11 @@ export class ServiceClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.HealthStatus, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.HealthStatus, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ContexthubApiError({
+            throw new errors.AgentlefsApiError({
                 statusCode: _response.error.statusCode,
                 body: _response.error.body,
                 rawResponse: _response.rawResponse,

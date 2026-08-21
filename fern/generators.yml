@@ -29,8 +29,8 @@ groups:
         # Adding one to this generator version silently breaks generation: the CLI still
         # prints "Wrote files to ..." and "Finished", and zero files appear. Bisected it
         # to the block itself rather than to any particular key, and it is not about the
-        # package name being npm-scoped (`contexthub` fails the same way as
-        # `@contexthub/sdk`).
+        # package name being npm-scoped (an unscoped name failed the same way as a scoped
+        # one).
         #
         # So package metadata (name, version, description) is NOT set here yet, which is
         # why `--package` cannot build an npm tarball: the generator emits either no

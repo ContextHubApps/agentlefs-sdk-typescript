@@ -8,7 +8,7 @@ import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import * as ContexthubApi from "../../../index.js";
+import * as AgentlefsApi from "../../../index.js";
 
 export declare namespace FoldersClient {
     export type Options = BaseClientOptions;
@@ -27,29 +27,29 @@ export class FoldersClient {
      * Lists one level. Omit `parent` for the top level, or pass a folder id to list
      * inside it.
      *
-     * @param {ContexthubApi.ListFoldersRequest} request
+     * @param {AgentlefsApi.ListFoldersRequest} request
      * @param {FoldersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.folders.listFolders()
      */
     public listFolders(
-        request: ContexthubApi.ListFoldersRequest = {},
+        request: AgentlefsApi.ListFoldersRequest = {},
         requestOptions?: FoldersClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.FolderList> {
+    ): core.HttpResponsePromise<AgentlefsApi.FolderList> {
         return core.HttpResponsePromise.fromPromise(this.__listFolders(request, requestOptions));
     }
 
     private async __listFolders(
-        request: ContexthubApi.ListFoldersRequest = {},
+        request: AgentlefsApi.ListFoldersRequest = {},
         requestOptions?: FoldersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.FolderList>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.FolderList>> {
         const { parent, limit, cursor } = request;
         const _queryParams: Record<string, unknown> = {
             parent,
@@ -66,7 +66,7 @@ export class FoldersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 "v1/folders",
             ),
             method: "GET",
@@ -83,28 +83,28 @@ export class FoldersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.FolderList, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.FolderList, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -122,15 +122,15 @@ export class FoldersClient {
      * slash in a name would silently manufacture an intermediate folder, and that
      * folder would be a permission scope. Use `path` to nest instead.
      *
-     * @param {ContexthubApi.CreateFolderRequest} request
+     * @param {AgentlefsApi.CreateFolderRequest} request
      * @param {FoldersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.ConflictError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.ConflictError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.folders.createFolder({
@@ -139,16 +139,16 @@ export class FoldersClient {
      *     })
      */
     public createFolder(
-        request: ContexthubApi.CreateFolderRequest,
+        request: AgentlefsApi.CreateFolderRequest,
         requestOptions?: FoldersClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.FolderCreated> {
+    ): core.HttpResponsePromise<AgentlefsApi.FolderCreated> {
         return core.HttpResponsePromise.fromPromise(this.__createFolder(request, requestOptions));
     }
 
     private async __createFolder(
-        request: ContexthubApi.CreateFolderRequest,
+        request: AgentlefsApi.CreateFolderRequest,
         requestOptions?: FoldersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.FolderCreated>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.FolderCreated>> {
         const { "Idempotency-Key": idempotencyKey, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -161,7 +161,7 @@ export class FoldersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 "v1/folders",
             ),
             method: "POST",
@@ -177,30 +177,30 @@ export class FoldersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.FolderCreated, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.FolderCreated, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new ContexthubApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new AgentlefsApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,

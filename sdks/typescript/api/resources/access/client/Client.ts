@@ -8,7 +8,7 @@ import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import * as ContexthubApi from "../../../index.js";
+import * as AgentlefsApi from "../../../index.js";
 
 export declare namespace AccessClient {
     export type Options = BaseClientOptions;
@@ -33,15 +33,15 @@ export class AccessClient {
      * reporting them would turn a question about one document into a partial map
      * of the tree above it.
      *
-     * @param {ContexthubApi.ListGrantsRequest} request
+     * @param {AgentlefsApi.ListGrantsRequest} request
      * @param {AccessClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.NotFoundError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.NotFoundError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.access.listGrants({
@@ -50,16 +50,16 @@ export class AccessClient {
      *     })
      */
     public listGrants(
-        request: ContexthubApi.ListGrantsRequest,
+        request: AgentlefsApi.ListGrantsRequest,
         requestOptions?: AccessClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.GrantList> {
+    ): core.HttpResponsePromise<AgentlefsApi.GrantList> {
         return core.HttpResponsePromise.fromPromise(this.__listGrants(request, requestOptions));
     }
 
     private async __listGrants(
-        request: ContexthubApi.ListGrantsRequest,
+        request: AgentlefsApi.ListGrantsRequest,
         requestOptions?: AccessClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.GrantList>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.GrantList>> {
         const { scope_type: scopeType, scope_id: scopeId } = request;
         const _queryParams: Record<string, unknown> = {
             scope_type: scopeType,
@@ -75,7 +75,7 @@ export class AccessClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 "v1/grants",
             ),
             method: "GET",
@@ -92,33 +92,33 @@ export class AccessClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.GrantList, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.GrantList, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new ContexthubApi.NotFoundError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.NotFoundError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -143,16 +143,16 @@ export class AccessClient {
      * outside the workspace. Those flows send mail and can admit a stranger, so
      * they stay in the console where a person performs them deliberately.
      *
-     * @param {ContexthubApi.CreateGrantRequest} request
+     * @param {AgentlefsApi.CreateGrantRequest} request
      * @param {AccessClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.NotFoundError}
-     * @throws {@link ContexthubApi.ConflictError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.NotFoundError}
+     * @throws {@link AgentlefsApi.ConflictError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.access.createGrant({
@@ -165,16 +165,16 @@ export class AccessClient {
      *     })
      */
     public createGrant(
-        request: ContexthubApi.CreateGrantRequest,
+        request: AgentlefsApi.CreateGrantRequest,
         requestOptions?: AccessClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.Grant> {
+    ): core.HttpResponsePromise<AgentlefsApi.Grant> {
         return core.HttpResponsePromise.fromPromise(this.__createGrant(request, requestOptions));
     }
 
     private async __createGrant(
-        request: ContexthubApi.CreateGrantRequest,
+        request: AgentlefsApi.CreateGrantRequest,
         requestOptions?: AccessClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.Grant>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.Grant>> {
         const { "Idempotency-Key": idempotencyKey, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -187,7 +187,7 @@ export class AccessClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 "v1/grants",
             ),
             method: "POST",
@@ -203,35 +203,35 @@ export class AccessClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.Grant, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.Grant, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new ContexthubApi.NotFoundError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.NotFoundError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new ContexthubApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new AgentlefsApi.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -253,15 +253,15 @@ export class AccessClient {
      * No `Idempotency-Key` is needed, since repeating a revoke has no additional
      * effect.
      *
-     * @param {ContexthubApi.RevokeGrantRequest} request
+     * @param {AgentlefsApi.RevokeGrantRequest} request
      * @param {AccessClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link ContexthubApi.BadRequestError}
-     * @throws {@link ContexthubApi.UnauthorizedError}
-     * @throws {@link ContexthubApi.NotFoundError}
-     * @throws {@link ContexthubApi.TooManyRequestsError}
-     * @throws {@link errors.ContexthubApiError}
-     * @throws {@link errors.ContexthubApiTimeoutError}
+     * @throws {@link AgentlefsApi.BadRequestError}
+     * @throws {@link AgentlefsApi.UnauthorizedError}
+     * @throws {@link AgentlefsApi.NotFoundError}
+     * @throws {@link AgentlefsApi.TooManyRequestsError}
+     * @throws {@link errors.AgentlefsApiError}
+     * @throws {@link errors.AgentlefsApiTimeoutError}
      *
      * @example
      *     await client.access.revokeGrant({
@@ -273,16 +273,16 @@ export class AccessClient {
      *     })
      */
     public revokeGrant(
-        request: ContexthubApi.RevokeGrantRequest,
+        request: AgentlefsApi.RevokeGrantRequest,
         requestOptions?: AccessClient.RequestOptions,
-    ): core.HttpResponsePromise<ContexthubApi.RevokeResult> {
+    ): core.HttpResponsePromise<AgentlefsApi.RevokeResult> {
         return core.HttpResponsePromise.fromPromise(this.__revokeGrant(request, requestOptions));
     }
 
     private async __revokeGrant(
-        request: ContexthubApi.RevokeGrantRequest,
+        request: AgentlefsApi.RevokeGrantRequest,
         requestOptions?: AccessClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ContexthubApi.RevokeResult>> {
+    ): Promise<core.WithRawResponse<AgentlefsApi.RevokeResult>> {
         const {
             subject_type: subjectType,
             subject_id: subjectId,
@@ -307,7 +307,7 @@ export class AccessClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ContexthubApiEnvironment.Production,
+                    environments.AgentlefsApiEnvironment.Production,
                 "v1/grants",
             ),
             method: "DELETE",
@@ -324,33 +324,33 @@ export class AccessClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ContexthubApi.RevokeResult, rawResponse: _response.rawResponse };
+            return { data: _response.body as AgentlefsApi.RevokeResult, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ContexthubApi.BadRequestError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.BadRequestError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new ContexthubApi.UnauthorizedError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.UnauthorizedError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new ContexthubApi.NotFoundError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.NotFoundError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 case 429:
-                    throw new ContexthubApi.TooManyRequestsError(
-                        _response.error.body as ContexthubApi.Error_,
+                    throw new AgentlefsApi.TooManyRequestsError(
+                        _response.error.body as AgentlefsApi.Error_,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.ContexthubApiError({
+                    throw new errors.AgentlefsApiError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,

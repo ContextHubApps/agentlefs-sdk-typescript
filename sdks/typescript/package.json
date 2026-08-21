@@ -1,0 +1,44 @@
+{
+  "name": "@agentlefs/sdk",
+  "version": "0.0.0-dev",
+  "description": "Official TypeScript SDK for the agentleFS REST API.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ContextHubApps/agentlefs-sdk-typescript.git"
+  },
+  "homepage": "https://agentlefs.com",
+  "keywords": [
+    "agentlefs",
+    "sdk",
+    "api-client",
+    "openapi"
+  ],
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "sideEffects": false
+}

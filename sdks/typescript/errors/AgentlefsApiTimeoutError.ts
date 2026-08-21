@@ -2,7 +2,7 @@
 
 import * as errors from "./index.js";
 
-export class ContexthubApiTimeoutError extends errors.ContexthubApiError {
+export class AgentlefsApiTimeoutError extends errors.AgentlefsApiError {
     constructor(message: string, opts?: { cause?: unknown }) {
         super({
             message: message,
@@ -13,6 +13,6 @@ export class ContexthubApiTimeoutError extends errors.ContexthubApiError {
             Error.captureStackTrace(this, this.constructor);
         }
 
-        this.name = "ContexthubApiTimeoutError";
+        this.name = "AgentlefsApiTimeoutError";
     }
 }

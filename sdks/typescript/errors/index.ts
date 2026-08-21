@@ -1,2 +1,2 @@
-export { ContexthubApiError } from "./ContexthubApiError.js";
-export { ContexthubApiTimeoutError } from "./ContexthubApiTimeoutError.js";
+export { AgentlefsApiError } from "./AgentlefsApiError.js";
+export { AgentlefsApiTimeoutError } from "./AgentlefsApiTimeoutError.js";
