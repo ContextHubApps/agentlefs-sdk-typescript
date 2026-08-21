@@ -47,6 +47,14 @@ const packageJson = {
   keywords: ["agentlefs", "sdk", "api-client", "openapi"],
   // Dual CJS/ESM, matching what the generated code is written for: source uses ESM with
   // explicit .js specifiers, which tsc emits correctly for both module systems.
+  //
+  // This makes Node treat every .js in the package as ESM, INCLUDING the CommonJS build that
+  // `main` points at. dist/cjs therefore needs its own package.json declaring
+  // {"type":"commonjs"} to opt that subtree back out; the `build` script below writes it.
+  // Shipped 0.2.0 without it, and `require("@agentlefs/sdk")` died on "Cannot find module
+  // './api/index.js'": Node parsed the CJS output as ESM, so its require() calls resolved as
+  // bare ESM specifiers. ESM consumers were unaffected, which is why the tarball checks
+  // (which only assert files exist) passed.
   type: "module",
   main: "./dist/cjs/index.js",
   module: "./dist/esm/index.js",
@@ -62,7 +70,11 @@ const packageJson = {
   // no benefit, since types come from the .d.ts files.
   files: ["dist", "README.md", "LICENSE"],
   scripts: {
-    build: "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
+    // The third step is load-bearing, not tidying: it stamps {"type":"commonjs"} into
+    // dist/cjs so Node stops reading that subtree as ESM. It runs here rather than in
+    // write-package-json.ts because dist/cjs does not exist until tsc creates it.
+    build:
+      "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && node -e \"require('fs').writeFileSync('dist/cjs/package.json', JSON.stringify({type:'commonjs'}) + '\\n')\"",
   },
   devDependencies: {
     // @types/node is required, not optional: the generated error classes call

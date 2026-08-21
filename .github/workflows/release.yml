@@ -122,6 +122,30 @@ jobs:
           test -f dist/cjs/index.js || { echo "::error::CJS build missing"; exit 1; }
           test -f dist/esm/index.d.ts || { echo "::error::type declarations missing"; exit 1; }
 
+      # EXISTENCE IS NOT LOADABILITY. The check above passed for 0.2.0, which shipped a CJS
+      # build that threw "Cannot find module './api/index.js'" on require(): root
+      # package.json has "type":"module", so Node parsed dist/cjs as ESM. Only actually
+      # importing the packed tarball catches that class of bug, so install it into a scratch
+      # project and load it through both entry points the exports map advertises.
+      - name: The published package loads in CJS and ESM
+        working-directory: sdks/typescript
+        run: |
+          tarball="$(npm pack --silent)"
+          work="$(mktemp -d)"
+          cd "$work"
+          npm init -y >/dev/null
+          npm install "$OLDPWD/$tarball" --no-audit --no-fund >/dev/null
+          node -e "
+            const m = require('@agentlefs/sdk');
+            if (typeof m.AgentlefsApiClient !== 'function') throw new Error('CJS: client export missing');
+            console.log('CJS require() ok');
+          "
+          node --input-type=module -e "
+            import { AgentlefsApiClient } from '@agentlefs/sdk';
+            if (typeof AgentlefsApiClient !== 'function') throw new Error('ESM: client export missing');
+            console.log('ESM import ok');
+          "
+
       # --access public because SCOPED PACKAGES DEFAULT TO PRIVATE, and publishing a scoped
       # package without it fails on a free org with an error about paid plans that does not
       # mention the flag.
