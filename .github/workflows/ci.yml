@@ -55,8 +55,14 @@ jobs:
 
       # --local runs the official generator containers under Docker, so this needs no Fern
       # account and no FERN_TOKEN. Docker is preinstalled on ubuntu-latest.
+      # The SAME pipeline a developer runs, via the npm script rather than a bare
+      # `fern generate`. That is the fix for a real failure: CI ran only the generator, so
+      # it deleted package.json, the tsconfigs, the README and the LICENSE (all written by
+      # write-package-json.ts, because the generator cannot write them) and then reported the
+      # deletion as drift. Any divergence between what CI runs and what `bun run generate`
+      # runs shows up as a phantom diff.
       - name: Regenerate
-        run: fern generate --local
+        run: bun run generate
 
       # The assertion. A dirty tree means the committed SDK is not what the spec produces.
       - name: Committed SDK is up to date
