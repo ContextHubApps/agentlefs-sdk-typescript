@@ -39,7 +39,8 @@ env:
   FERN_VERSION: "5.98.3"
 
 permissions:
-  contents: read
+  # write, not read: the last step creates a GitHub Release for the tag.
+  contents: write
   # Required for trusted publishing. Harmless before it is configured, and having it here
   # already means switching to OIDC is a deletion rather than an edit.
   id-token: write
@@ -137,6 +138,32 @@ jobs:
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public
+
+      # A GitHub Release for the tag, so the repo's Releases page is not empty while npm is
+      # the only record that a version exists. Attaches the tarball, so the exact artifact
+      # that was published is downloadable without trusting the registry to keep it.
+      #
+      # Runs only on a real tag push. `--generate-notes` lets GitHub write the commit list,
+      # and the body adds what a changelog cannot infer: how to install it and where the
+      # source of truth is.
+      - name: Create the GitHub Release
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        working-directory: sdks/typescript
+        run: |
+          tarball=$(npm pack --silent)
+          gh release create "${GITHUB_REF_NAME}" "$tarball" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "@agentlefs/sdk ${{ steps.version.outputs.version }}" \
+            --generate-notes \
+            --notes "Generated from the agentleFS OpenAPI spec at https://agentlefs.com/v1/openapi.yaml.
+
+          \`\`\`bash
+          npm install @agentlefs/sdk@${{ steps.version.outputs.version }}
+          \`\`\`
+
+          The attached tarball is the exact artifact published to npm."
 
       - name: Dry run only
         if: github.event_name == 'workflow_dispatch' && inputs.dry_run == true
