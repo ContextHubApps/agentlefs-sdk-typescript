@@ -5,20 +5,16 @@
 # configured against `release.yml`, renaming this file breaks publishing with an
 # authentication error that does not mention the rename. Do not rename it.
 #
-# ── TOKEN NOW, OIDC LATER ────────────────────────────────────────────────────
-# Trusted publishing (OIDC, no stored credential, automatic provenance) is the destination.
-# It cannot be configured until the package exists on the registry, because the setting
-# lives on the package's settings page. So publish #1 uses NPM_TOKEN, and after that:
+# ── AUTHENTICATION IS OIDC, NOT A TOKEN ──────────────────────────────────────
+# Trusted publishing is configured for this package, so there is no NPM_TOKEN in this
+# workflow and none is needed. npm exchanges the OIDC token from `id-token: write` for a
+# short-lived credential scoped to this repo and this workflow file, and generates provenance
+# attestations automatically.
 #
-#   1. npmjs.com -> @agentlefs/sdk -> Settings -> Trusted Publisher
-#      org/user: ContextHubApps, repo: agentlefs-sdk-typescript,
-#      workflow: release.yml, allowed action: npm publish
-#   2. delete the `NODE_AUTH_TOKEN` env line below
-#   3. revoke NPM_TOKEN in npm settings AND delete the repo secret
+# Configured as: ContextHubApps / agentlefs-sdk-typescript / release.yml / npm publish.
 #
-# `id-token: write` is already set, so step 2 is a one-line deletion rather than a rewrite.
-# Leaving a live publish token in place once OIDC works is the failure mode worth avoiding:
-# it is a long-lived credential nobody is watching.
+# Worth knowing it was set up BEFORE the package existed on the registry, which npm's docs
+# are ambiguous about. So a first release does not need a token-based bootstrap.
 name: Release
 
 on:
@@ -41,8 +37,8 @@ env:
 permissions:
   # write, not read: the last step creates a GitHub Release for the tag.
   contents: write
-  # Required for trusted publishing. Harmless before it is configured, and having it here
-  # already means switching to OIDC is a deletion rather than an edit.
+  # Required for trusted publishing: npm exchanges this OIDC token for a short-lived publish
+  # credential. Removing it does not fall back to anything, it just fails as unauthenticated.
   id-token: write
 
 jobs:
@@ -130,20 +126,21 @@ jobs:
       # package without it fails on a free org with an error about paid plans that does not
       # mention the flag.
       #
-      # NODE_AUTH_TOKEN, not NPM_CONFIG_TOKEN. actions/setup-node with `registry-url`
-      # writes an .npmrc containing `_authToken=${NODE_AUTH_TOKEN}`, so that exact name is
-      # what npm reads. My first attempt invented NPM_CONFIG_TOKEN, which npm ignored with a
-      # warning ("Unknown env config") and then failed as E404 on PUT, because an
-      # unauthenticated publish of a scoped package is indistinguishable from one you have no
-      # permission for. A 404 here means unauthenticated, not missing.
+      # NO CREDENTIAL HERE, DELIBERATELY. Authentication is trusted publishing: npm exchanges
+      # the OIDC token granted by `id-token: write` above for a short-lived publish
+      # credential, scoped to this repository and this workflow filename.
       #
-      # This is the bootstrap credential. Delete this env block once trusted publishing is
-      # configured; npm then uses the OIDC token granted by id-token: write.
+      # DO NOT add a NODE_AUTH_TOKEN fallback here. A token in the environment takes
+      # precedence over OIDC, so a "just in case" fallback would silently keep publishing with
+      # a long-lived credential while the workflow appeared to be using trusted publishing.
+      #
+      # npm is also removing the alternative. 2FA-bypass tokens lose sensitive account actions
+      # in Aug 2026 and direct publishing around Jan 2027
+      # (github.blog/changelog/2026-07-08-npm-install-time-security-and-gat-bypass2fa-deprecation),
+      # so OIDC is the only path that does not expire.
       - name: Publish
         if: github.event_name == 'push' || inputs.dry_run == false
         working-directory: sdks/typescript
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public
 
       # A GitHub Release for the tag, so the repo's Releases page is not empty while npm is
@@ -183,10 +180,9 @@ jobs:
             echo "### @agentlefs/sdk ${{ steps.version.outputs.version }}"
             echo ""
             if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
-              echo "Published to npm."
+              echo "Published to npm via trusted publishing, with provenance."
               echo ""
-              echo "Next: configure trusted publishing on the package settings page, then delete"
-              echo "the NODE_AUTH_TOKEN env block from this workflow and revoke the token."
+              echo "https://www.npmjs.com/package/@agentlefs/sdk/v/${{ steps.version.outputs.version }}"
             else
               echo "Dry run. Nothing published."
             fi
