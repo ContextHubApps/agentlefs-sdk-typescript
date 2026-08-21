@@ -13,7 +13,7 @@
 #   1. npmjs.com -> @agentlefs/sdk -> Settings -> Trusted Publisher
 #      org/user: ContextHubApps, repo: agentlefs-sdk-typescript,
 #      workflow: release.yml, allowed action: npm publish
-#   2. delete the `NPM_CONFIG_TOKEN` env line below
+#   2. delete the `NODE_AUTH_TOKEN` env line below
 #   3. revoke NPM_TOKEN in npm settings AND delete the repo secret
 #
 # `id-token: write` is already set, so step 2 is a one-line deletion rather than a rewrite.
@@ -130,13 +130,20 @@ jobs:
       # package without it fails on a free org with an error about paid plans that does not
       # mention the flag.
       #
-      # NPM_CONFIG_TOKEN is the bootstrap credential. Delete this env block once trusted
-      # publishing is configured; npm then uses the OIDC token from id-token: write.
+      # NODE_AUTH_TOKEN, not NPM_CONFIG_TOKEN. actions/setup-node with `registry-url`
+      # writes an .npmrc containing `_authToken=${NODE_AUTH_TOKEN}`, so that exact name is
+      # what npm reads. My first attempt invented NPM_CONFIG_TOKEN, which npm ignored with a
+      # warning ("Unknown env config") and then failed as E404 on PUT, because an
+      # unauthenticated publish of a scoped package is indistinguishable from one you have no
+      # permission for. A 404 here means unauthenticated, not missing.
+      #
+      # This is the bootstrap credential. Delete this env block once trusted publishing is
+      # configured; npm then uses the OIDC token granted by id-token: write.
       - name: Publish
         if: github.event_name == 'push' || inputs.dry_run == false
         working-directory: sdks/typescript
         env:
-          NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public
 
       # A GitHub Release for the tag, so the repo's Releases page is not empty while npm is
@@ -179,7 +186,7 @@ jobs:
               echo "Published to npm."
               echo ""
               echo "Next: configure trusted publishing on the package settings page, then delete"
-              echo "the NPM_CONFIG_TOKEN env block from this workflow and revoke the token."
+              echo "the NODE_AUTH_TOKEN env block from this workflow and revoke the token."
             else
               echo "Dry run. Nothing published."
             fi
