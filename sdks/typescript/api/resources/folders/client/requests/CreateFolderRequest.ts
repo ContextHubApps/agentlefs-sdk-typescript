@@ -4,7 +4,7 @@
  * @example
  *     {
  *         "Idempotency-Key": "Idempotency-Key",
- *         folder: "handbook"
+ *         location: "handbook/vendor/contracts"
  *     }
  */
 export interface CreateFolderRequest {
@@ -16,8 +16,6 @@ export interface CreateFolderRequest {
      * key.
      */
     "Idempotency-Key": string;
-    /** Top-level folder name. No slashes. */
-    folder: string;
-    /** Optional directory within the folder. */
-    path?: string;
+    /** Where the folder goes, as one whole path from the workspace root. */
+    location: string;
 }

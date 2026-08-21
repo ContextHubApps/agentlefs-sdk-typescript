@@ -4,8 +4,7 @@
  * @example
  *     {
  *         "Idempotency-Key": "Idempotency-Key",
- *         folder: "handbook",
- *         path: "onboarding/day-one.md",
+ *         location: "handbook/onboarding/day-one.md",
  *         content: "content"
  *     }
  */
@@ -18,7 +17,10 @@ export interface CreateDocumentRequest {
      * key.
      */
     "Idempotency-Key": string;
-    folder: string;
-    path: string;
+    /**
+     * Where the document goes, as one whole path from the workspace root,
+     * filename included.
+     */
+    location: string;
     content: string;
 }

@@ -15,8 +15,11 @@ export interface SearchRequest {
      * several and merges. `titles`, `labels`, `text`, and `meaning` force one.
      */
     mode?: AgentlefsApi.SearchRequestMode;
-    /** Restrict to one folder. Omit to sweep everything you reach. */
-    folder?: string;
+    /**
+     * Restrict to one folder or directory, as a whole path from the workspace
+     * root. Omit to sweep everything you reach.
+     */
+    location?: string;
     /** Maximum items to return. Clamped to the server maximum (50). */
     limit?: number;
 }

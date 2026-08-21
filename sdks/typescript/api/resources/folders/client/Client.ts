@@ -118,9 +118,12 @@ export class FoldersClient {
     /**
      * Creates a folder and grants your key's principal ownership of it.
      *
-     * A folder NAME may not contain a slash. Folders here are path prefixes, so a
-     * slash in a name would silently manufacture an intermediate folder, and that
-     * folder would be a permission scope. Use `path` to nest instead.
+     * Nesting is expressed in the location itself: `handbook` makes a top-level
+     * folder, `handbook/vendor/contracts` makes a nested one, creating whatever is
+     * missing along the way. This took a `folder` name that could not contain a
+     * slash plus an optional `path` to nest under it — a caller had to decide where
+     * the folder stopped and the directory began, for a distinction storage does not
+     * make. Each segment is still a permission scope.
      *
      * @param {AgentlefsApi.CreateFolderRequest} request
      * @param {FoldersClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -135,7 +138,7 @@ export class FoldersClient {
      * @example
      *     await client.folders.createFolder({
      *         "Idempotency-Key": "Idempotency-Key",
-     *         folder: "handbook"
+     *         location: "handbook/vendor/contracts"
      *     })
      */
     public createFolder(

@@ -3,14 +3,17 @@
 /**
  * @example
  *     {
- *         folder: "folder"
+ *         location: "sales/eu"
  *     }
  */
 export interface ListDocumentsRequest {
-    /** The folder the document lives in. */
-    folder: string;
-    /** Restrict to documents under this path prefix within the folder. */
-    path?: string;
+    /**
+     * Where to act, as ONE whole path from the workspace root — `sales` for a
+     * top-level folder, `sales/eu` for a directory inside one. There is no separate
+     * `folder` parameter: a location says where something is in a single string, so
+     * a caller never has to decide where the folder stops and the path begins.
+     */
+    location: string;
     /** Restrict to one document type. */
     type?: string;
     /**

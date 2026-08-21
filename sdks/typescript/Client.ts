@@ -75,11 +75,11 @@ export class AgentlefsApiClient {
         request: AgentlefsApi.SearchRequest,
         requestOptions?: AgentlefsApiClient.RequestOptions,
     ): Promise<core.WithRawResponse<AgentlefsApi.SearchResults>> {
-        const { q, mode, folder, limit } = request;
+        const { q, mode, location, limit } = request;
         const _queryParams: Record<string, unknown> = {
             q,
             mode: mode != null ? mode : undefined,
-            folder,
+            location,
             limit,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();

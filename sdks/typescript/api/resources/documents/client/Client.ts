@@ -35,7 +35,7 @@ export class DocumentsClient {
      *
      * @example
      *     await client.documents.listDocuments({
-     *         folder: "folder"
+     *         location: "sales/eu"
      *     })
      */
     public listDocuments(
@@ -49,10 +49,9 @@ export class DocumentsClient {
         request: AgentlefsApi.ListDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<AgentlefsApi.DocumentList>> {
-        const { folder, path, type: type_, label, limit, cursor } = request;
+        const { location, type: type_, label, limit, cursor } = request;
         const _queryParams: Record<string, unknown> = {
-            folder,
-            path,
+            location,
             type: type_,
             label,
             limit,
@@ -139,8 +138,7 @@ export class DocumentsClient {
      * @example
      *     await client.documents.createDocument({
      *         "Idempotency-Key": "Idempotency-Key",
-     *         folder: "handbook",
-     *         path: "onboarding/day-one.md",
+     *         location: "handbook/onboarding/day-one.md",
      *         content: "content"
      *     })
      */
@@ -235,8 +233,7 @@ export class DocumentsClient {
      *
      * @example
      *     await client.documents.retrieveDocument({
-     *         path: "onboarding/day-one.md",
-     *         folder: "folder"
+     *         location: "handbook/onboarding/day-one.md"
      *     })
      */
     public retrieveDocument(
@@ -250,9 +247,8 @@ export class DocumentsClient {
         request: AgentlefsApi.RetrieveDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<AgentlefsApi.DocumentContent>> {
-        const { path, folder, offset } = request;
+        const { location, offset } = request;
         const _queryParams: Record<string, unknown> = {
-            folder,
             offset,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -266,7 +262,7 @@ export class DocumentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AgentlefsApiEnvironment.Production,
-                `v1/documents/${core.url.encodePathParam(path)}`,
+                `v1/documents/${core.url.encodePathParam(location)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -316,7 +312,7 @@ export class DocumentsClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/documents/{path}");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/documents/{location}");
     }
 
     /**
@@ -337,8 +333,7 @@ export class DocumentsClient {
      * @example
      *     await client.documents.updateDocument({
      *         "If-Match": "If-Match",
-     *         path: "onboarding/day-one.md",
-     *         folder: "folder",
+     *         location: "handbook/onboarding/day-one.md",
      *         content: "content"
      *     })
      */
@@ -353,10 +348,7 @@ export class DocumentsClient {
         request: AgentlefsApi.UpdateDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<AgentlefsApi.WriteResult>> {
-        const { path, folder, "If-Match": ifMatch, ..._body } = request;
-        const _queryParams: Record<string, unknown> = {
-            folder,
-        };
+        const { location, "If-Match": ifMatch, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -369,16 +361,12 @@ export class DocumentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AgentlefsApiEnvironment.Production,
-                `v1/documents/${core.url.encodePathParam(path)}`,
+                `v1/documents/${core.url.encodePathParam(location)}`,
             ),
             method: "PUT",
             headers: _headers,
             contentType: "application/json",
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -424,7 +412,7 @@ export class DocumentsClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PUT", "/v1/documents/{path}");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PUT", "/v1/documents/{location}");
     }
 
     /**
@@ -449,8 +437,7 @@ export class DocumentsClient {
      * @example
      *     await client.documents.deleteDocument({
      *         "If-Match": "If-Match",
-     *         path: "onboarding/day-one.md",
-     *         folder: "folder"
+     *         location: "handbook/onboarding/day-one.md"
      *     })
      */
     public deleteDocument(
@@ -464,10 +451,7 @@ export class DocumentsClient {
         request: AgentlefsApi.DeleteDocumentRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<AgentlefsApi.DeleteResult>> {
-        const { path, folder, "If-Match": ifMatch } = request;
-        const _queryParams: Record<string, unknown> = {
-            folder,
-        };
+        const { location, "If-Match": ifMatch } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -480,15 +464,11 @@ export class DocumentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AgentlefsApiEnvironment.Production,
-                `v1/documents/${core.url.encodePathParam(path)}`,
+                `v1/documents/${core.url.encodePathParam(location)}`,
             ),
             method: "DELETE",
             headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -532,14 +512,14 @@ export class DocumentsClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v1/documents/{path}");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v1/documents/{location}");
     }
 
     /**
-     * Renames without relocating. Takes a `name`, never a path: a name may not
-     * contain a slash, because folders here exist only as path prefixes, so a
-     * slash would manufacture an intermediate folder and that folder would be a
-     * permission scope. Use `POST /v1/moves` to relocate.
+     * Renames without relocating. `from` is the whole location being renamed; `name`
+     * is the new NAME, never a path: a name may not contain a slash, because a slash
+     * would manufacture an intermediate folder and that folder would be a permission
+     * scope. Use `POST /v1/moves` to relocate.
      *
      * Authorization is stricter than a write. The whole subtree under `from` must
      * be yours to change, including any part of it you cannot see, for the same
@@ -564,8 +544,7 @@ export class DocumentsClient {
      * @example
      *     await client.documents.renameDocument({
      *         "Idempotency-Key": "Idempotency-Key",
-     *         folder: "handbook",
-     *         from: "onboarding/day-one.md",
+     *         from: "handbook/onboarding/day-one.md",
      *         name: "day-1.md"
      *     })
      */
@@ -690,10 +669,8 @@ export class DocumentsClient {
      * @example
      *     await client.documents.moveDocument({
      *         "Idempotency-Key": "Idempotency-Key",
-     *         from_folder: "drafts",
-     *         from: "q3-plan.md",
-     *         to_folder: "handbook",
-     *         to: "planning/q3-plan.md"
+     *         from: "drafts/q3-plan.md",
+     *         to: "handbook/planning/q3-plan.md"
      *     })
      */
     public moveDocument(

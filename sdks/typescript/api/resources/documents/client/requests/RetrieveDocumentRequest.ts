@@ -3,19 +3,29 @@
 /**
  * @example
  *     {
- *         path: "onboarding/day-one.md",
- *         folder: "folder"
+ *         location: "handbook/onboarding/day-one.md"
  *     }
  */
 export interface RetrieveDocumentRequest {
     /**
-     * The document path within the folder, URL-encoded once. An encoded slash
-     * (`%2F`) is rejected: use the literal path separator so the path means the
-     * same thing to us as it does to you.
+     * The document's whole path from the workspace root, filename included,
+     * URL-encoded once.
+     *
+     * The path separators may be sent either way. `handbook/onboarding/day-one.md`
+     * and `handbook%2Fonboarding%2Fday-one.md` address the same document, because
+     * the value is decoded exactly once before it is used. Write whichever is more
+     * natural: a handwritten request usually uses literal separators, while a
+     * generated SDK client will percent-encode them, since OpenAPI requires a path
+     * parameter's reserved characters to be escaped.
+     *
+     * What is rejected, in either spelling, is a path that does not mean one
+     * definite location: an empty segment (`//`) or a relative segment (`.`, `..`)
+     * is a `400`, whether written literally or percent-encoded.
+     *
+     * This was the document's path WITHIN a folder, alongside a required `folder`
+     * query parameter. One location replaces both.
      */
-    path: string;
-    /** The folder the document lives in. */
-    folder: string;
+    location: string;
     /** Byte offset, for paging through a document larger than the read cap. */
     offset?: number;
 }

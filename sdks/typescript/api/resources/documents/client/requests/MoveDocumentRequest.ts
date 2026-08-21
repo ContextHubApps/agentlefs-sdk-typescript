@@ -4,10 +4,8 @@
  * @example
  *     {
  *         "Idempotency-Key": "Idempotency-Key",
- *         from_folder: "drafts",
- *         from: "q3-plan.md",
- *         to_folder: "handbook",
- *         to: "planning/q3-plan.md"
+ *         from: "drafts/q3-plan.md",
+ *         to: "handbook/planning/q3-plan.md"
  *     }
  */
 export interface MoveDocumentRequest {
@@ -19,9 +17,12 @@ export interface MoveDocumentRequest {
      * key.
      */
     "Idempotency-Key": string;
-    from_folder: string;
+    /** Current whole location of what is moving, from the workspace root. */
     from: string;
-    to_folder: string;
+    /**
+     * Its whole location after the move. The containing directory must
+     * differ from `from`'s — use `POST /v1/renames` to rename in place.
+     */
     to: string;
     /** Set true to proceed with a move that widens access. */
     acknowledge_access_change?: boolean;

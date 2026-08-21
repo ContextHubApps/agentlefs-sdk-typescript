@@ -4,8 +4,7 @@
  * @example
  *     {
  *         "Idempotency-Key": "Idempotency-Key",
- *         folder: "handbook",
- *         from: "onboarding/day-one.md",
+ *         from: "handbook/onboarding/day-one.md",
  *         name: "day-1.md"
  *     }
  */
@@ -18,8 +17,10 @@ export interface RenameDocumentRequest {
      * key.
      */
     "Idempotency-Key": string;
-    folder: string;
-    /** Current path of the document or directory. */
+    /**
+     * Current whole location of the document or directory, from the
+     * workspace root.
+     */
     from: string;
     /** New name. No slashes. */
     name: string;

@@ -3,7 +3,9 @@
 export interface Folder {
     /** The addressable folder id, and the same string a permission grant names. */
     id?: string | undefined;
-    folder?: string | undefined;
-    /** Path within the top-level folder. Empty for the folder itself. */
-    path?: string | undefined;
+    /**
+     * The folder's whole path from the workspace root — the same string as `id`.
+     * This was `folder` plus a `path` within it; both said what `id` already says.
+     */
+    location?: string | undefined;
 }
